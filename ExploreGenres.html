@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Explore Genres</title>
+    <link rel="icon" href="Image/webpage_icon.png">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="">
+
+    <script>
+        var client_id = '0478ce6c643f44508e01522adc3e32c6';
+        var client_secret = '832578ce742b455a875ee2e405d6a6c1';
+
+        var authOptions = {
+            url: 'https://accounts.spotify.com/api/token',
+            headers: {
+                'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
+            },
+            form: {
+                grant_type: 'client_credentials'
+            },
+            json: true
+        };
+
+        request.post(authOptions, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                var token = body.access_token;
+            }
+        });
+    </script>
+    <script>
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200)
+                myFunction(this);
+        }
+        xmlhttp.open("GET", "https://api.spotify.com/v1/recommendations/available-genre-seeds", true);
+        xmlhttp.send();
+
+        function myFunction(Data) {
+            console.log(Data);
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
