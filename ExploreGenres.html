@@ -33,25 +33,38 @@
                     Authorization: "Bearer " + accessToken,
                 },
             })
-            .then(response => response.json())
-            .then(data => {
-                // show genres in console
-                console.log("API Response:", data);
+                .then(response => response.json())
+                .then(data => {
+                    // show genres in console
+                    console.log("API Response:", data);
 
-                // add json item into list of page
-                const genreList = document.getElementById('genre-list');
-                data.genres.forEach(genre => {
-                    const listItem = document.createElement('p');
-                    listItem.textContent = genre;
-                    genreList.appendChild(listItem);
+                    // add json item into list of page
+                    const genreList = document.getElementById('genre-list');
+                    data.genres.forEach(genre => {
+                        const capitalizedGenre = genre.charAt(0).toUpperCase() + genre.slice(1);
+                        const listItem = document.createElement('p');
+                        listItem.textContent = capitalizedGenre;
+                        listItem.style.backgroundColor = getRandomDarkColor(); 
+                        genreList.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching API:", error);
                 });
-            })
-            .catch(error => {
-                console.error("Error fetching API:", error);
-            });
         };
 
-        getToken(); 
+        getToken();
+
+        // generate random dark backgroud colors
+        function getRandomDarkColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 3; i++) {
+                var value = Math.floor(Math.random() * 192); 
+                color += (value < 16 ? '0' : '') + value.toString(16);
+            }
+            return color;
+        }
     </script>
 
 </head>
@@ -67,11 +80,14 @@
         <!-- Genre list section -->
         <section id="list">
             <div id="genre-list">
+            </div>
         </section>
     </main>
 
     <footer>
-
+        <section id="copyright">
+            <p>&copy; Group 6 Giovanny and Desmond</p>
+        </section>
     </footer>
 </body>
 
