@@ -1,0 +1,15 @@
+header {
+    background-color: black; 
+    padding: 20px; 
+    display: flex; 
+    justify-content: flex-end; 
+}
+
+#logo img {
+    width: 150px; 
+    height: auto; 
+}
+
+main {
+    padding: 20px;
+}

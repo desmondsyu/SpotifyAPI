@@ -7,46 +7,72 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="">
-
+    <link rel="stylesheet" href="Style/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-        var client_id = '';
-        var client_secret = '';
 
-        var authOptions = {
-            url: 'https://accounts.spotify.com/api/token',
-            headers: {
-                'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
-            },
-            form: {
-                grant_type: 'client_credentials'
-            },
-            json: true
+        const clientId = `0478ce6c643f44508e01522adc3e32c6`;
+        const clientSecret = `832578ce742b455a875ee2e405d6a6c1`;
+        let accessToken = null;
+
+        const getToken = async () => {
+            const result = await fetch("https://accounts.spotify.com/api/token", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    Authorization: "Basic " + btoa(`${clientId}:${clientSecret}`),
+                },
+                body: "grant_type=client_credentials",
+            });
+            const data = await result.json();
+            accessToken = data.access_token;
+
+            // call api of genre and get return data
+            fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds", {
+                headers: {
+                    Authorization: "Bearer " + accessToken,
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                // show genres in console
+                console.log("API Response:", data);
+
+                // add json item into list of page
+                const genreList = document.getElementById('genre-list');
+                data.genres.forEach(genre => {
+                    const listItem = document.createElement('p');
+                    listItem.textContent = genre;
+                    genreList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching API:", error);
+            });
         };
 
-        request.post(authOptions, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                var token = body.access_token;
-            }
-        });
+        getToken(); 
     </script>
-    <script>
-        xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200)
-                myFunction(this);
-        }
-        xmlhttp.open("GET", "https://api.spotify.com/v1/recommendations/available-genre-seeds", true);
-        xmlhttp.send();
 
-        function myFunction(Data) {
-            console.log(Data);
-        }
-    </script>
 </head>
 
 <body>
+    <header>
+        <section id="logo">
+            <img src="Image/spotify-icons-logos/logos/01_RGB/02_PNG/Spotify_Logo_RGB_Green.png" alt="spotifylogo" width="500" height="600">
+        </section>
+    </header>
 
+    <main>
+        <!-- Genre list section -->
+        <section id="list">
+            <div id="genre-list">
+        </section>
+    </main>
+
+    <footer>
+
+    </footer>
 </body>
 
 </html>
