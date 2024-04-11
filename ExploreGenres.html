@@ -1,3 +1,12 @@
+<!--/*****************************************************************************
+ITC5202 – Project 2
+I declare that this assignment is my own work in accordance with Humber Academic Policy.
+No part of this assignment has been copied manually or electronically from any other source
+(including web sites) or distributed to other students.
+Group member Name: 
+Student IDs:
+Date:
+****************************************************************************-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,7 +53,7 @@
                         const capitalizedGenre = genre.charAt(0).toUpperCase() + genre.slice(1);
                         const listItem = document.createElement('p');
                         listItem.textContent = capitalizedGenre;
-                        listItem.style.backgroundColor = getRandomDarkColor(); 
+                        listItem.style.backgroundColor = getRandomDarkColor();
                         genreList.appendChild(listItem);
                     });
                 })
@@ -60,7 +69,7 @@
             var letters = '0123456789ABCDEF';
             var color = '#';
             for (var i = 0; i < 3; i++) {
-                var value = Math.floor(Math.random() * 192); 
+                var value = Math.floor(Math.random() * 192);
                 color += (value < 16 ? '0' : '') + value.toString(16);
             }
             return color;
@@ -71,6 +80,41 @@
 
 <body>
     <header>
+        <!-- Search bar section -->
+        <section id="search-bar">
+            <input type="text" id="search-input" placeholder="What do you want to play?">
+            <div>
+                <button id="search-button">Search</button>
+                <button id="reset-button">Reset</button>
+            </div>
+        </section>
+        <script>
+            // Filter genres based on search input
+            document.getElementById('search-button').addEventListener('click', () => {
+                const searchInput = document.getElementById('search-input').value.toLowerCase();
+                const genreItems = document.querySelectorAll('#genre-list p');
+                genreItems.forEach(item => {
+                    const genre = item.textContent.toLowerCase();
+                    if (genre.includes(searchInput)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+
+            // Reset genre list to show all genres
+            document.getElementById('reset-button').addEventListener('click', () => {
+                const genreItems = document.querySelectorAll('#genre-list p');
+                genreItems.forEach(item => {
+                    item.style.display = 'flex';
+                });
+                const searchInput = document.getElementById('search-input');
+                searchInput.value = '';
+            });
+        </script>
+
+        <!-- logo section -->
         <section id="logo">
             <img src="Image/Spotify_Logo_RGB_Green.png" alt="spotifylogo" width="500" height="600">
         </section>

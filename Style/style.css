@@ -1,56 +1,94 @@
+body {
+    margin: 0;
+}
+
 header {
-    background-color: black; 
-    padding: 20px; 
-    display: flex; 
-    justify-content: flex-end; 
+    background-color: black;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #logo img {
-    width: 150px; 
-    height: auto; 
+    width: 150px;
+    height: auto;
+}
+
+#search-bar {
+    width: 100%;
+    display: flex;
+    font-family: sans-serif;
+}
+
+#search-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin: 2px 20px 2px 0;
+}
+
+#search-button,
+#reset-button {
+    padding: 8px 12px;
+    margin: 2px 20px 2px 0;
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid white;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 80px;
+}
+
+#search-button:hover,
+#reset-button:hover {
+    background-color: #45a060;
 }
 
 main {
-    padding: 10px 15%;
+    margin: 10px 17%;
 }
 
 #genre-list {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); 
-    gap: 10px; 
+    display: inline-grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
     padding: 10px;
+    grid-auto-columns: 20%;
+}
+
+@media(max-width: 1090px) {
+    #genre-list {
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-columns: 25%;
+    }
+}
+
+@media(max-width: 890px) {
+    #genre-list {
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-columns: 33.3%;
+    }
 }
 
 #genre-list p {
     font-family: sans-serif;
     color: white;
     font-size: larger;
-    font-weight: 600;
-    padding: 20px; 
-    text-align: center; 
+    padding: 20px;
+    text-align: center;
+    width: auto;
     aspect-ratio: 1;
-    border-radius: 10px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease; 
+    font-size: 16px;
+    font-weight: bold;
 }
-
-@media screen and (max-width: 800px) {
-    #genre-list {
-        grid-template-columns: repeat(4, 1fr); 
-    }
-}
-
-@media screen and (max-width: 600px) {
-    #genre-list {
-        grid-template-columns: repeat(3, 1fr); 
-    }
-}
-
 
 footer {
-    background-color: #333;
+    background-color: #1a1a1a;
     color: #fff;
     padding: 20px;
     text-align: center;
