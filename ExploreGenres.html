@@ -147,9 +147,9 @@ Date:
             // Filter genres based on search input
             document.getElementById('search-button').addEventListener('click', () => {
                 const searchInput = document.getElementById('search-input').value.toLowerCase();
-                const genreItems = document.querySelectorAll('#genre-list p');
+                const genreItems = document.querySelectorAll('#genre-list div');
                 genreItems.forEach(item => {
-                    const genre = item.textContent.toLowerCase();
+                    const genre = item.id.toLowerCase();
                     if (genre.includes(searchInput)) {
                         item.style.display = 'flex';
                     } else {
