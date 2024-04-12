@@ -160,7 +160,7 @@ Date:
 
             // Reset genre list to show all genres
             document.getElementById('reset-button').addEventListener('click', () => {
-                const genreItems = document.querySelectorAll('#genre-list p');
+                const genreItems = document.querySelectorAll('#genre-list div');
                 genreItems.forEach(item => {
                     item.style.display = 'flex';
                 });
