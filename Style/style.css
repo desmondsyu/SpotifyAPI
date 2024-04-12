@@ -53,6 +53,29 @@ header {
     background-color: #45a060;
 }
 
+/* checkbox style */
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: white;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #4CAF50;
+}
+
+label[for="showPlaylist"] {
+    font-size: 16px;
+    color: white;
+}
+
 main {
     margin: 10px 15%;
 }
@@ -79,7 +102,7 @@ main {
     }
 }
 
-#genre-list p {
+#genre-list div {
     font-family: sans-serif;
     color: white;
     font-size: larger;
@@ -90,8 +113,17 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
     font-weight: bold;
+    flex-direction: column;
+}
+
+#genre-list div h2 {
+    font-size: 16px;
+    border:#ccc 1px;
+}
+
+#genre-list p {
+    font-size: 12px;
 }
 
 footer {

@@ -20,64 +20,111 @@ Date:
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
 
-        const clientId = `0478ce6c643f44508e01522adc3e32c6`;
-        const clientSecret = `832578ce742b455a875ee2e405d6a6c1`;
-        let accessToken = null;
+        document.addEventListener('DOMContentLoaded', function () {
+            const clientId = `0478ce6c643f44508e01522adc3e32c6`;
+            const clientSecret = `832578ce742b455a875ee2e405d6a6c1`;
+            let accessToken = null;
 
-        const getToken = async () => {
-            const result = await fetch("https://accounts.spotify.com/api/token", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    Authorization: "Basic " + btoa(`${clientId}:${clientSecret}`),
-                },
-                body: "grant_type=client_credentials",
-            });
-            const data = await result.json();
-            accessToken = data.access_token;
-
-            // call api of genre and get return data
-            fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds", {
-                headers: {
-                    Authorization: "Bearer " + accessToken,
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // show genres in console
-                    console.log("API Response:", data);
-
-                    // add json item into list of page
-                    const genreList = document.getElementById('genre-list');
-                    data.genres.forEach(genre => {
-                        const capitalizedGenre = genre.charAt(0).toUpperCase() + genre.slice(1);
-                        const listItem = document.createElement('p');
-                        listItem.textContent = capitalizedGenre;
-                        listItem.style.backgroundColor = getRandomDarkColor();
-                        genreList.appendChild(listItem);
-                    });
-                })
-                .catch(error => {
-                    console.error("Error fetching API:", error);
+            const getToken = async () => {
+                const result = await fetch("https://accounts.spotify.com/api/token", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        Authorization: "Basic " + btoa(`${clientId}:${clientSecret}`),
+                    },
+                    body: "grant_type=client_credentials",
                 });
-        };
+                const data = await result.json();
+                accessToken = data.access_token;
 
-        
+                // call api of genre and get return data
+                fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds", {
+                    headers: {
+                        Authorization: "Bearer " + accessToken,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // show genres in console
+                        console.log("API Response:", data);
 
-        getToken();
+                        // add json item into list of page
+                        const genreList = document.getElementById('genre-list');
+                        data.genres.forEach(genre => {
+                            const capitalizedGenre = genre.charAt(0).toUpperCase() + genre.slice(1);
 
-        // generate random dark backgroud colors
-        function getRandomDarkColor() {
-            var letters = '0123456789ABCDEF';
-            var color = '#';
-            for (var i = 0; i < 3; i++) {
-                var value = Math.floor(Math.random() * 192);
-                color += (value < 16 ? '0' : '') + value.toString(16);
+                            // add div to the grid list
+                            const listItemContainer = document.createElement('div');
+                            genreList.appendChild(listItemContainer);
+                            listItemContainer.classList.add('listItemContainer');
+                            listItemContainer.id = capitalizedGenre;
+                            listItemContainer.style.backgroundColor = getRandomDarkColor();
+                            // add a paragraph to each div
+                            const listItem = document.createElement('h2');
+                            listItemContainer.appendChild(listItem);
+                            listItem.textContent = capitalizedGenre;
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching API:", error);
+                    });
+            };
+
+            getToken();
+
+            // generate random dark backgroud colors
+            function getRandomDarkColor() {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 3; i++) {
+                    var value = Math.floor(Math.random() * 192);
+                    color += (value < 16 ? '0' : '') + value.toString(16);
+                }
+                return color;
             }
-            return color;
-        }
-    </script>
 
+            // Function to fetch playlists for a genre and add them to the corresponding div
+            function fetchPlaylistsForGenre(genre) {
+                fetch(`https://api.spotify.com/v1/search?q=${genre}&type=playlist&limit=10`, {
+                    headers: {
+                        Authorization: "Bearer " + accessToken,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const playlistContainer = document.getElementById(genre);
+
+                        data.playlists.items.forEach(playlist => {
+                            const playlistElement = document.createElement('p');
+                            playlistElement.classList.add('genrePlaylist');
+                            playlistElement.innerHTML = playlist.name;
+                            playlistContainer.appendChild(playlistElement);
+
+                            playlistContainer.style.aspectRatio = '';
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching playlists:", error);
+                    });
+            }
+
+            // Event listener for checkbox
+            document.getElementById('showPlaylist').addEventListener('change', (event) => {
+                const isChecked = event.target.checked;
+                const genreItems = document.querySelectorAll('#genre-list h2');
+                if (isChecked) {
+                    genreItems.forEach(item => {
+                        const genre = item.textContent;
+                        fetchPlaylistsForGenre(genre);
+                    });
+                } else {
+                    // Clear playlists if unchecked
+                    const playlistContainers = document.querySelectorAll('.genrePlaylist');
+                    playlistContainers.forEach(container => container.remove());
+                }
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -88,6 +135,10 @@ Date:
             <div>
                 <button id="search-button">Search</button>
                 <button id="reset-button">Reset</button>
+            </div>
+            <div>
+                <input type="checkbox" id="showPlaylist" name="showPlaylist" value="playlist">
+                <label for="showPlaylist">Show Playlist</label>
             </div>
         </section>
 
