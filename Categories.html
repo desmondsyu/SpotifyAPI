@@ -37,7 +37,7 @@ Date:
             accessToken = data.access_token;
 
             // call api of genre and get return data
-            fetch("https://api.spotify.com/v1/recommendations/available-genre-seeds", {
+            fetch("https://api.spotify.com/v1/browse/categories?limit=50", {
                 headers: {
                     Authorization: "Bearer " + accessToken,
                 },
@@ -49,7 +49,7 @@ Date:
 
                     // add json item into list of page
                     const genreList = document.getElementById('genre-list');
-                    data.genres.forEach(genre => {
+                    data.categories.items.forEach(genre => {
                         const capitalizedGenre = genre.charAt(0).toUpperCase() + genre.slice(1);
                         const listItem = document.createElement('p');
                         listItem.textContent = capitalizedGenre;
@@ -61,8 +61,6 @@ Date:
                     console.error("Error fetching API:", error);
                 });
         };
-
-        
 
         getToken();
 
@@ -81,7 +79,7 @@ Date:
 </head>
 
 <body>
-    <header id="myHeader">
+    <header>
         <!-- Search bar section -->
         <section id="search-bar">
             <input type="text" id="search-input" placeholder="What do you want to play?">
@@ -90,8 +88,6 @@ Date:
                 <button id="reset-button">Reset</button>
             </div>
         </section>
-
-        <!-- Filter and reset button script -->
         <script>
             // Filter genres based on search input
             document.getElementById('search-button').addEventListener('click', () => {
@@ -123,22 +119,6 @@ Date:
             <img src="Image/Spotify_Logo_RGB_Green.png" alt="spotifylogo" width="500" height="600">
         </section>
     </header>
-
-    <!-- Script to keep header on the top -->
-    <script>
-        window.onscroll = function () { myFunction() };
-
-        var header = document.getElementById("myHeader");
-        var sticky = header.offsetTop;
-
-        function myFunction() {
-            if (window.pageYOffset > sticky) {
-                header.classList.add("sticky");
-            } else {
-                header.classList.remove("sticky");
-            }
-        }
-    </script>
 
     <main>
         <!-- Genre list section -->
