@@ -53,7 +53,6 @@ header {
     background-color: #45a060;
 }
 
-/* checkbox style */
 input[type="checkbox"] {
     appearance: none;
     -webkit-appearance: none;
@@ -78,20 +77,48 @@ label[for="showPlaylist"] {
 
 #checkboxContainer {
     display: flex;
-    align-items: center; 
+    align-items: center;
 }
 
+/* #container {
+    display: flex;
+} */
+
 main {
-    margin: 10px 15%;
+    display: flex;
+}
+
+#tracklist {
+    position: fixed;
+    width: 20%;
+    background-color: rgb(20, 23, 20);
+    color: #fafefd;
+    font-family: sans-serif;
+    display: none;
+    overflow-y: auto;
+    z-index: 2;
+    height: 100%;
+    box-sizing: border-box;
+    top: 89px;
+}
+
+#tracklist div {
+    padding: 5px;
+}
+
+#list {
+    width: 80%;
+    margin: 0 auto;
+    /* margin-left: 20%; */
 }
 
 #genre-list {
+    /* margin: 10px 10%; */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 10px;
     padding: 10px;
     grid-auto-columns: 20%;
-
 }
 
 #genre-list div {
@@ -107,6 +134,8 @@ main {
     justify-content: center;
     font-weight: bold;
     flex-direction: column;
+    min-width: 100px;
+    max-width: 200px;
 }
 
 #genre-list div h2 {
@@ -117,18 +146,4 @@ main {
 #genre-list p {
     font-size: 12px;
     margin: 6px 0;
-}
-
-footer {
-    background-color: #1a1a1a;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-
-footer p {
-    margin: 0;
 }

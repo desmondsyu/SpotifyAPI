@@ -52,13 +52,13 @@ Date:
                         data.genres.forEach(genre => {
                             const capitalizedGenre = genre.charAt(0).toUpperCase() + genre.slice(1);
 
-                            // add div to the grid list
+                            // add div to the grid list, add class and id to each genre
                             const listItemContainer = document.createElement('div');
                             genreList.appendChild(listItemContainer);
                             listItemContainer.classList.add('listItemContainer');
                             listItemContainer.id = capitalizedGenre;
                             listItemContainer.style.backgroundColor = getRandomDarkColor();
-                            // add a paragraph to each div
+                            // add a text of genre name to each div
                             const listItem = document.createElement('h2');
                             listItemContainer.appendChild(listItem);
                             listItem.textContent = capitalizedGenre;
@@ -91,14 +91,22 @@ Date:
                 })
                     .then(response => response.json())
                     .then(data => {
+                        // get the matching genre by id
                         const playlistContainer = document.getElementById(genre);
 
+                        // add the playlists to the genre div content
                         data.playlists.items.forEach(playlist => {
                             const playlistElement = document.createElement('p');
                             playlistElement.classList.add('genrePlaylist');
                             playlistElement.innerHTML = playlist.name;
+
+                            playlistElement.addEventListener('click', () => {
+                                fetchTracksForPlaylist(playlist.id);
+                            });
+
                             playlistContainer.appendChild(playlistElement);
 
+                            // change aspect ratio of each color box
                             playlistContainer.style.aspectRatio = '';
                         });
                     })
@@ -111,17 +119,46 @@ Date:
             document.getElementById('showPlaylist').addEventListener('change', (event) => {
                 const isChecked = event.target.checked;
                 const genreItems = document.querySelectorAll('#genre-list h2');
+                const tracklist = document.getElementById('tracklist');
                 if (isChecked) {
                     genreItems.forEach(item => {
                         const genre = item.textContent;
                         fetchPlaylistsForGenre(genre);
+                        tracklist.style.display = 'block';
                     });
+                    // push the genres to right
+                    document.getElementById('list').style.marginLeft = '20%';
+
                 } else {
                     // Clear playlists if unchecked
                     const playlistContainers = document.querySelectorAll('.genrePlaylist');
                     playlistContainers.forEach(container => container.remove());
+                    tracklist.style.display = 'none';
+                    document.getElementById('list').style.margin = '0 auto';
                 }
             });
+
+            // Function to fetch and display tracks for a playlist
+            function fetchTracksForPlaylist(playlistId) {
+                fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+                    headers: {
+                        Authorization: "Bearer " + accessToken,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const tracklist = document.getElementById('track-list');
+                        tracklist.innerHTML = ''; // Clear previous tracklist
+                        data.items.forEach(track => {
+                            const trackElement = document.createElement('div');
+                            trackElement.textContent = track.track.name;
+                            tracklist.appendChild(trackElement);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching tracks:", error);
+                    });
+            }
         });
     </script>
 </head>
@@ -191,6 +228,10 @@ Date:
     </script>
 
     <main>
+        <section id="tracklist">
+            <div id="track-list">
+            </div>
+        </section>
         <!-- Genre list section -->
         <section id="list">
             <div id="genre-list">
@@ -198,11 +239,8 @@ Date:
         </section>
     </main>
 
-    <footer>
-        <section id="copyright">
-            <p>&copy; Group 6</p>
-        </section>
-    </footer>
+
+
 </body>
 
 </html>
